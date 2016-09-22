@@ -48,64 +48,109 @@ int * Algo2(int * tab, int n) {
     return bornes ;
 }
 
-
 //O(n log n)
 int * Algo3(int * tab, int deb, int fin) {
-    int* borneDeb = malloc(sizeof(int)*2) ;
-    int* borneFin = malloc(sizeof(int)*2) ;
 
-    borneDeb = Algo3(tab, 0, fin/2) ;
-    borneFin = Algo3(tab, fin/2, fin) ;
+    int mil = (deb + fin) / 2 ;
 
+    int * SSeq = malloc(sizeof(int)*3) ;
+
+    if(deb == fin) {
+        SSeq[0] = deb ;
+        SSeq[1] = fin ;
+        SSeq[2] = tab[deb] ;
+        return SSeq ;
+    }
+
+    int * SeqG = Algo3(tab, deb, mil) ;
+    int * SeqD = Algo3(tab, mil+1, fin) ;
+    int * SeqM = malloc(sizeof(int)*3) ;
+
+    int i ;
+
+    int sommeG = tab[mil], borneInf = mil ;
+    int sommeGmax = sommeG ;
+    for(i=mil-1 ; i >= deb ; i--) {
+        sommeG += tab[i] ;
+        if(sommeG >= sommeGmax) {
+            sommeGmax = sommeG ;
+            borneInf = i ;
+        }
+    }
+    int sommeD = tab[mil+1], borneSup = mil + 1 ;
+    int sommeDmax = sommeD ;
+    for(i=mil+2 ; i<=fin ; i++) {
+        sommeD += tab[i] ;
+        if(sommeD >= sommeDmax) {
+            sommeDmax = sommeD ;
+            borneSup = i ;
+        }
+    }
+
+    int sommeMilieu = sommeDmax + sommeGmax ;
+    if(SeqG[2]>=SeqD[2] && SeqG[2]>=sommeMilieu)
+        return SeqG ;
+    else if(SeqD[2]>=SeqG[2] && SeqD[2]>=sommeMilieu)
+        return SeqD ;
+    else {
+        SeqM[0] = borneInf ;
+        SeqM[1] = borneSup ;
+        SeqM[2] = sommeMilieu ;
+        return SeqM ;
+    }
+}
+
+//O(n)
+int * Algo4(int * tab, int n) {
+
+    int * bornes = malloc(sizeof(int)*2) ;
+
+    int cmp = 0, imax = 0;
+    while(tab[cmp] < 0 || cmp<n) {
+        if(tab[cmp] < tab[imax])
+            imax = cmp ;
+        cmp++ ;
+    }
+    if(tab[cmp] < 0) {
+        bornes[0] = imax ;
+        bornes[1] = imax ;
+        return bornes ;
+    }
+
+    int i, borneInf = cmp ;
+    int sommeMax = 0 ;
+    int sommeCourant = 0 ;
+    for(i=cmp ; i<n ; i++) {
+        sommeCourant += tab[i] ;
+        if(sommeCourant < 0) {
+            sommeCourant = 0 ;
+            borneInf = i+1 ;
+        }
+        if(sommeMax <= sommeCourant) {
+            sommeMax = sommeCourant ;
+            bornes[0] = borneInf ;
+            bornes[1] = i ;
+        }
+    }
     return bornes ;
 }
 
-// ALGO 4
-
-/* SommeMax = T[0] ;
-        Somme = 0 ;
-        cmp = 0	;
-        BorneMin, BorneMax = -1 ;
-
-        WHILE T[cmp] < 0 && cmp < N
-                IF SommeMax < T[cmp]
-                THEN
-                        SommeMax = T[cmp]
-                        BorneMax = BorneMin = cmp ;
-                cmp ++ ;
-        FIN WHILE
-        IF cmp = N-1
-        THEN
-                RETURN BorneMin, BorneMax ;
-
-
-        SommeMax = 0 ;
-        BorneMin = cmp ;
-        FOR i=cmp à N-1
-                IF T[i] >= 0
-                THEN
-                        SommeMax += T[i]
-                        BorneMax = i ;
-                ELSE 	IF Somme += T[i] < 0
-                        THEN
-                                Somme = 0 ;
-                                BorneMin = i+1 ;*/
 
 void affiche_tab(int * tab, int taille) {
     int i ;
-    for(i=0 ; i<taille ; i++)
+    for(i=0 ; i<taille-1 ; i++)
         printf("%d ", tab[i]) ;
-    printf("\n") ;
+    printf("\t%d\n", tab[taille-1]) ;
 }
 
 
-int main (void) {
+int main (int argc, char *argv[]) {
 
-    int tab[10] = {-10, -23, -600, -1000, 0, -5, -3, 12, -2005, -2500} ;
+    int tab[10] = {-10, 23, 600, -1000, -1, 300, 199, -2, 199, -10} ;
 
-    int * sousSeq = Algo2(tab, 10) ;
+    int * sousSeq = Algo3(tab, 0, 9) ;
 
-    affiche_tab(sousSeq, 2);
+    affiche_tab(sousSeq, 3);
 
     return 0 ;
 }
