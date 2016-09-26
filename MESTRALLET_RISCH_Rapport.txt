@@ -1,0 +1,192 @@
+RAPPORT COMPLEXITE TP1
+
+MESTRALLET Alexis
+RISCH Philippe
+
+Exercice a) PSEUDO_ALGORITHME :
+
+Pseudo_Algo1 :
+
+Entrée : Tab d'entier, taille de Tab.
+Sortie : La borneInf et borneSup de la SousSéquence de somme maximal
+
+sommeMax = 0
+POUR i allant de 0 à taille-1
+|	sommeCourant = 0
+|	POUR j allant de i à taille-1
+|	|	POUR k allant de i à j
+|	|	|	sommeCourant = sommeCourant + Tab[k]
+|	|	|	SI sommeMax < sommeCourant
+|	|	|	|	sommeMax = sommeCourant
+|	|	|	|	borneInf = i
+|	|	|	|	borneSup = k
+|	|	|	FIN SI
+|	|	FIN POUR
+|	FIN POUR
+FIN POUR
+RETOURNER borneInf, borneSup
+
+
+
+Pseudo_Algo2 :
+
+Entrée : Tab d'entier, taille de Tab.
+Sortie : La borneInf et borneSup de la SousSéquence de somme maximal
+
+sommeMax = 0
+POUR i allant de 0 à taille-1
+|	sommeCourant = 0 ;
+|	POUR j allant de i à taille-1
+|	|	sommeCourant = sommeCourant + Tab[j]
+|	|	SI sommeMax < sommeCourant
+|	|	|	sommeMax = sommeCourant
+|	|	|	borneInf = i ;
+|	|	|	borneSup = j ;
+|	|	FIN SI
+|	FIN POUR
+FIN POUR
+RETOURNER borneInf, borneSup
+
+
+Pseudo_Algo3 :
+
+Entrée : Tab d'entier, indice du début, indice de fin
+Sortie : La borneInf, borneSup et la valeur de la somme maximal
+
+milieu = (debut+fin)/2
+
+SI(debut=fin)
+|	borneInf = debut
+|	borneSup = borneInf
+|	valeur = Tab[borneInf]
+|	RETOURNER borneInf, borneSup, valeur
+FIN SI
+
+SousSéquenceGauche = Pseudo_Algo3(Tab, debut, milieu)
+SousSéquenceDroite = Pseudo_Algo3(Tab, milieu+1, fin)
+
+sommeGauche = Tab[milieu]
+sommeGmax = sommeGauche
+borneInf = milieu
+POUR i allant de milieu-1 à debut
+|	sommeGauche = sommeGauche + Tab[i]
+|	SI sommeGauche >= sommeGmax
+|	|	sommeGmax = sommeGauche
+|	|	borneInf = i
+|	FIN SI
+FIN POUR
+
+sommeDroit = Tab[milieu+1]
+sommeDmax = sommeDroit
+borneSup = milieu+1
+POUR i allant de milieu+2 à fin
+|	sommeDroit = sommeDroit + Tab[i]
+|	SI sommeDroit >= sommeDmax
+|	|	sommeDmax = sommeDroit
+|	|	borneSup = i ;
+|	FIN SI
+FIN POUR
+	
+sommeMilieu = sommeDmax + sommeGmax
+SI(SousSequenceGauche > SousSequenceDroit et > sommeMilieu)
+|	RETOURNER SousSequenceGauche et ses bornes
+SINON SI(SousSequenceDroit > SousSequenceGauche et > sommeMilieu)
+|	RETOURNER SousSequenceDroit et ses bornes
+SINON
+|	RETOURNER sommeMilieu et ses bornes
+FIN SI
+
+
+
+Pseudo_Algo4 :
+
+Entrée : Tab d'entier, taille de Tab.
+Sortie : La borneInf et borneSup de la SousSéquence de somme maximal
+
+cmp = INIT :	trouve le premier element positif de Tab[]
+		renvoie le plus grand négatif sinon
+
+
+sommeMax = 0
+sommeCourant = 0
+POUR i allant de cmp à taille-1
+|	sommeCourant = sommeCourant + tab[i]
+|	SI sommeCourant < 0
+|	|	sommeCourant = 0
+|	|	borneInf = i+1
+|	FINSI
+|	SI sommeMax <= sommeCourant
+|	|	sommeMax = sommeCourant
+|	|	borneSup = i
+|	FIN SI
+FIN POUR
+RETOURNER borneInf, borneSup
+
+
+
+Exercice b) ANALYSE DE LA COMPLEXITE
+
+Algo1 : Nous avons 3 boucles qui parcours le tableau soit
+	O(n * n * n)	où n=taille de Tab
+	==> O(n³)
+Algo2 : Nous avons 2 boucles qui parcours le tableau soit
+	O(n * n)	où n=taille de Tab
+	==> O(n²)
+Algo3 : Nous avons un appel récursif permettant de diviser le tableau 		à la manière de divisé-pour-régner puis 1 boucle permettant de 		calculer la sommeMax, soit
+	O((log n) * n)
+	==>O(n.log n)
+Algo4 : Nous avons 1 boucle permettant le parcours du tableau soit
+	O(n)
+
+
+Exercice c) IMPLEMENTATION
+	cf. Sous-Sequence-Maximale.c
+
+
+Exercice d) COMPARAISON DES PERFORMANCE
+
+Pour une comparaison des performances optimale, nous allons tester nos algorithmes sur des tableaux de taille = 2 500 pour tout algo, puis de taille = 100 000 pour l'algo 3 et 4 ;
+(Généré aléatoirement, éléments compris entre [-100 ; 100])
+
+taille = 2 500
+bornes = [301 ; 2496] 
+
+Algo1 :	real	0m9.573s
+	user	0m9.540s
+	sys	0m0.004s
+
+
+Algo2 : real	0m0.013s
+	user	0m0.012s
+	sys	0m0.000s
+
+
+Algo3 : real	0m0.002s
+	user	0m0.000s
+	sys	0m0.000s
+
+
+Algo4 : real	0m0.001s
+	user	0m0.000s
+	sys	0m0.000s
+
+taille = 100 000
+borne = [301 ; 95 622]
+
+Algo3 : real	0m0.071s
+	user	0m0.020s
+	sys	0m0.016s
+
+Algo4 : real	0m0.041s
+	user	0m0.012s
+	sys	0m0.004s
+
+Exercice e)
+	
+
+	Au vu des résultats ci dessus, où on voit nettement la différence de rapidité d'execution qui va par exemple de 9s pour l'algo à 0.001s pour les mêmes paramètre.
+On voit bien qu'en terme de tmps d'execution Algo1>Algo2>Algo3>Algo4 et de facon bien conséquente selon la taille de l'entrée.
+	On peut en déduire très facilement que l'analyse faite en Exercice b) respecte les résultats vu dans l'Exercice d).
+	
+	On voit clairement la différence entre une complexité cubique et une complexité linéraire, d'ailleurs je n'ai pas eu la patience d'attendre la fin d'execution des Algo1 et Algo2 pour une taille de Tab = 100 000 tellement le temps d'execution était long. (Abandonné après 1min chacun).
+
