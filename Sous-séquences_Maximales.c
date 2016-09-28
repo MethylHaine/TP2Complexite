@@ -9,7 +9,6 @@ int * Algo1(int * tab, int n) {
     int sommeMax = 0 ;
 
     for(i=0 ; i<n ; i++) {
-        //sommeCourant = 0 ;
         for(j=i+1 ; j<n ; j++) {
             sommeCourant = 0 ;
             for(cmp=i ; cmp<=j ; cmp++) {
