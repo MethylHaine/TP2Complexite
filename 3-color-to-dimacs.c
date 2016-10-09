@@ -41,11 +41,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
-
-
-    fprintf(cnf, "\n") ;
-
     fclose(cnf) ;
 
     return 0 ;
