@@ -15,18 +15,34 @@ int main(int argc, char *argv[]) {
 
     int nb_var = 3 * nb_sommets ;
     int nb_clause = 3 * nb_aretes + nb_sommets ;
+    int i, j ;
+
+    int matrice[nb_sommets][3] ;
+    int cmp = 1 ;
 
     //Initiatisation
     fprintf(cnf, "p cnf %d %d\n", nb_var, nb_clause) ;
 
     //Chaque sommet a une couleur
-    int i, j ;
-    for(i=1 ; i<=nb_var ; i+=3) {
-        for(j=i ; j<i+3 ; j++) {
-            fprintf(cnf, "%d ", j) ;
+    for(i=0 ; i<nb_sommets ; i++) {
+        for(j=0 ; j<3 ; j++) {
+            matrice[i][j] = cmp ;
+            cmp ++ ;
+            fprintf(cnf, "%d ", matrice[i][j]) ;
         }
         fprintf(cnf, "0\n") ;
     }
+
+    //2 aretes adjacentes n'ont pas la même couleur
+    for(i=4 ; i<argc ; i+=2) {
+        for(j=0 ; j<3 ; j++) {
+            fprintf(cnf, "-%d -%d ", matrice[atoi(argv[i-1])-1][j], matrice[atoi(argv[i])-1][j]) ;
+            fprintf(cnf, "0\n") ;
+        }
+    }
+
+
+
 
     fprintf(cnf, "\n") ;
 
