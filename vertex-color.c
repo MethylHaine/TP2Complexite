@@ -11,8 +11,8 @@ int main(void)
     {
         perror("Fichier inexistant") ;
     }
-
-    printf("Les couleurs sont données d'après le modèle\n") ;
+    printf("\n") ;
+    printf("Si un modele existe les couleurs sont données d'après le modèle\n") ;
     printf(" ----------------------------------------------\n") ;
     printf("|                   \033[38;01mR\033[00m \033[32;01mG\033[00m \033[36;01mB\033[00m                     |\n") ;
     printf(" ----------------------------------------------\n") ;
