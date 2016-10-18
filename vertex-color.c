@@ -2,14 +2,22 @@
 #include <stdlib.h>
 #define SIZEMAX 10000
 
-int main(void)
+int main(int argc, char * argv[])
 {
-	int color, vertex = 0 ;
+	if(argc < 2)
+    {
+        perror("Erreur : un argument attendu");
+        exit(0);
+    }
 
-	FILE * modele = fopen("modele.txt", "r") ;
+    int color, vertex = 0 ;
+
+	FILE * modele = fopen(argv[1], "r") ;
+   
     if(modele == NULL) 
     {
-        perror("Fichier inexistant") ;
+        perror("Erreur : Fichier inexistant") ;
+        exit(0);
     }
     printf("\n") ;
     printf("Si un modele existe les couleurs sont données d'après le modèle\n") ;
@@ -53,6 +61,8 @@ int main(void)
     	if(color == 0)
     		break;
     }
+
+    fclose(modele);
 
     return 0;
 }

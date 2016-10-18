@@ -89,6 +89,7 @@ int main(int argc, char *argv[]) {
     FILE* cnf = fopen("3-color-to-dimacs.cnf", "w") ;
     if(cnf == NULL) {
         perror("Fichier non trouvé/ouvert") ;
+        exit(0);
     }
 
     if(argc > 2) {
@@ -128,8 +129,10 @@ int main(int argc, char *argv[]) {
         graphRandom(atoi(argv[1]), cnf) ;
     }
 
-    else
+    else{
         perror("Erreur, argument(s) attendu(s)") ;
+        exit(0);
+    }
 
     fclose(cnf) ;
 
